@@ -8,9 +8,9 @@
     the ground or a pipe, the game is over.
 ]]
 
-Bird = Class{}
+Bird = Class {}
 
-local GRAVITY = 20
+local GRAVITY = 2
 
 function Bird:init()
     -- load bird image from disk and assign its width and height
@@ -23,11 +23,13 @@ function Bird:init()
     self.y = VIRTUAL_HEIGHT / 2 - (self.height / 2)
 
     -- Y velocity; gravity
-    self.dy = 0
+    self.dy = 0 -- 每dt下落的距离, 也就是速度
 end
 
 function Bird:update(dt)
     -- apply gravity to velocity
+    -- 每dt下落的距离逐渐变大, 即下落的速度越来越大
+    -- 有一点重力加速度的感觉
     self.dy = self.dy + GRAVITY * dt
 
     -- apply current velocity to Y position

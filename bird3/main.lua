@@ -74,16 +74,18 @@ end
 function love.keypressed(key)
     if key == 'escape' then
         love.event.quit()
+    elseif key == 'space' then
+        bird.dy = -2
     end
 end
 
 function love.update(dt)
     -- scroll background by preset speed * dt, looping back to 0 after the looping point
-    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) 
+    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
         % BACKGROUND_LOOPING_POINT
 
     -- scroll ground by preset speed * dt, looping back to 0 after the screen width passes
-    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) 
+    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
         % VIRTUAL_WIDTH
 
     bird:update(dt)
@@ -101,6 +103,6 @@ function love.draw()
 
     -- render our bird to the screen using its own render logic
     bird:render()
-    
+
     push:finish()
 end
