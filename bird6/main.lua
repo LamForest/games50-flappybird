@@ -95,7 +95,7 @@ end
 function love.keypressed(key)
     -- add to our table of keys pressed this frame
     love.keyboard.keysPressed[key] = true
-    
+
     if key == 'escape' then
         love.event.quit()
     end
@@ -115,11 +115,11 @@ end
 
 function love.update(dt)
     -- scroll background by preset speed * dt, looping back to 0 after the looping point
-    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) 
+    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
         % BACKGROUND_LOOPING_POINT
 
     -- scroll ground by preset speed * dt, looping back to 0 after the screen width passes
-    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) 
+    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
         % GROUND_LOOPING_POINT
 
     spawnTimer = spawnTimer + dt
@@ -129,10 +129,11 @@ function love.update(dt)
         -- modify the last Y coordinate we placed so pipe gaps aren't too far apart
         -- no higher than 10 pixels below the top edge of the screen,
         -- and no lower than a gap length (90 pixels) from the bottom
-        local y = math.max(-PIPE_HEIGHT + 10, 
+        -- clamp在 [-PIPE_HEIGHT + 10, VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT] 之间
+        local y = math.max(-PIPE_HEIGHT + 10,
             math.min(lastY + math.random(-20, 20), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
         lastY = y
-        
+
         table.insert(pipePairs, PipePair(y))
         spawnTimer = 0
     end
@@ -177,6 +178,6 @@ function love.draw()
 
     -- render our bird to the screen using its own render logic
     bird:render()
-    
+
     push:finish()
 end

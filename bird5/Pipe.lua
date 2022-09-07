@@ -9,12 +9,12 @@
     the pipes themselves scroll through the game to give the illusion of player movement.
 ]]
 
-Pipe = Class{}
+Pipe = Class {}
 
 -- since we only want the image loaded once, not per instantation, define it externally
 local PIPE_IMAGE = love.graphics.newImage('pipe.png')
 
-local PIPE_SCROLL = -60
+local PIPE_SCROLL = -1000
 
 function Pipe:init()
     self.x = VIRTUAL_WIDTH

@@ -8,7 +8,7 @@
     the ground or a pipe, the game is over.
 ]]
 
-Bird = Class{}
+Bird = Class {}
 
 local GRAVITY = 20
 
@@ -35,6 +35,7 @@ function Bird:collides(pipe)
     -- the 4's are right and bottom offsets
     -- both offsets are used to shrink the bounding box to give the player
     -- a little bit of leeway with the collision
+    -- 更好理解反过来的情况, 4中情况满足一个  x1 + w1 <= x2 || x1 >= x2 + w2 || y也是这样..
     if (self.x + 2) + (self.width - 4) >= pipe.x and self.x + 2 <= pipe.x + PIPE_WIDTH then
         if (self.y + 2) + (self.height - 4) >= pipe.y and self.y + 2 <= pipe.y + PIPE_HEIGHT then
             return true

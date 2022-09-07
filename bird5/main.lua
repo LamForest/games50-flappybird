@@ -76,6 +76,7 @@ function love.load()
     })
 
     -- initialize input table
+    print(love.keyboard.keysPressed) -- 为nil, keypressed是love 没有的属性, 我们给他加了一个自定义的属性keyPressed
     love.keyboard.keysPressed = {}
 end
 
@@ -86,7 +87,7 @@ end
 function love.keypressed(key)
     -- add to our table of keys pressed this frame
     love.keyboard.keysPressed[key] = true
-    
+
     if key == 'escape' then
         love.event.quit()
     end
@@ -106,17 +107,17 @@ end
 
 function love.update(dt)
     -- scroll background by preset speed * dt, looping back to 0 after the looping point
-    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) 
+    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
         % BACKGROUND_LOOPING_POINT
 
     -- scroll ground by preset speed * dt, looping back to 0 after the screen width passes
-    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) 
+    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
         % VIRTUAL_WIDTH
 
     spawnTimer = spawnTimer + dt
 
     -- spawn a new Pipe if the timer is past 2 seconds
-    if spawnTimer > 2 then
+    if spawnTimer > 1 then
         table.insert(pipes, Pipe())
         print('Added new pipe!')
         spawnTimer = 0
@@ -136,6 +137,7 @@ function love.update(dt)
     end
 
     -- reset input table
+    -- 极其重要, 每帧状态更新结束时, 重置keysPressed的状态
     love.keyboard.keysPressed = {}
 end
 
@@ -156,6 +158,6 @@ function love.draw()
 
     -- render our bird to the screen using its own render logic
     bird:render()
-    
+
     push:finish()
 end

@@ -8,7 +8,7 @@
     for the player to jump through in order to score a point.
 ]]
 
-PipePair = Class{}
+PipePair = Class {}
 
 -- size of the gap between pipes
 local GAP_HEIGHT = 90
@@ -27,6 +27,7 @@ function PipePair:init(y)
     }
 
     -- whether this pipe pair is ready to be removed from the scene
+    -- 初始化所有属性是一个好习惯
     self.remove = false
 end
 
