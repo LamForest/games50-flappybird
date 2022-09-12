@@ -35,7 +35,7 @@
 	straight forward.
 ]]
 
-StateMachine = Class{}
+StateMachine = Class {}
 
 function StateMachine:init(states)
 	self.empty = {
@@ -50,6 +50,7 @@ end
 
 function StateMachine:change(stateName, enterParams)
 	assert(self.states[stateName]) -- state must exist!
+	self.state_name = stateName
 	self.current:exit()
 	self.current = self.states[stateName]()
 	self.current:enter(enterParams)

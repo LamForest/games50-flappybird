@@ -8,7 +8,7 @@
     we then go back to the main menu.
 ]]
 
-PlayState = Class{__includes = BaseState}
+PlayState = Class { __includes = BaseState }
 
 PIPE_SPEED = 60
 PIPE_WIDTH = 70
@@ -36,7 +36,7 @@ function PlayState:update(dt)
         -- modify the last Y coordinate we placed so pipe gaps aren't too far apart
         -- no higher than 10 pixels below the top edge of the screen,
         -- and no lower than a gap length (90 pixels) from the bottom
-        local y = math.max(-PIPE_HEIGHT + 10, 
+        local y = math.max(-PIPE_HEIGHT + 10,
             math.min(self.lastY + math.random(-20, 20), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
         self.lastY = y
 
@@ -79,7 +79,7 @@ function PlayState:update(dt)
             if self.bird:collides(pipe) then
                 sounds['explosion']:play()
                 sounds['hurt']:play()
-
+                -- 牛逼, 状态转移的时候还可以传递信息
                 gStateMachine:change('score', {
                     score = self.score
                 })

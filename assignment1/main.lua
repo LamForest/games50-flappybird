@@ -51,8 +51,14 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
 
+-- 难以理解, background, ground 都是在love.load之前加载的
+-- 但还是被load的setDefaultFilter改变了
+-- 但是utils中的icon的filter没有被改变
 local background = love.graphics.newImage('background.png')
 local backgroundScroll = 0
+
+print(love.graphics.getDefaultFilter()) -- 'linear'
+print(background:getFilter()) --'linear'
 
 local ground = love.graphics.newImage('ground.png')
 local groundScroll = 0
@@ -62,10 +68,14 @@ local GROUND_SCROLL_SPEED = 60
 
 local BACKGROUND_LOOPING_POINT = 413
 
+local is_pause = false
+local pause_sprite = Quads[33]
+
 function love.load()
     -- initialize our nearest-neighbor filter
     love.graphics.setDefaultFilter('nearest', 'nearest')
-    
+    print("setDefaultFilter")
+
     -- seed the RNG
     math.randomseed(os.time())
 
@@ -85,6 +95,7 @@ function love.load()
         ['explosion'] = love.audio.newSource('explosion.wav', 'static'),
         ['hurt'] = love.audio.newSource('hurt.wav', 'static'),
         ['score'] = love.audio.newSource('score.wav', 'static'),
+        ['pause'] = love.audio.newSource('pause.wav', 'static'),
 
         -- https://freesound.org/people/xsgianni/sounds/388079/
         ['music'] = love.audio.newSource('marios_way.mp3', 'static')
@@ -154,6 +165,21 @@ function love.mouse.wasPressed(button)
 end
 
 function love.update(dt)
+    if gStateMachine.state_name == 'play' and love.keyboard.wasPressed('p') then
+        is_pause = not is_pause
+        if is_pause then
+            sounds['music']:pause()
+
+            sounds.pause:play()
+        end
+    end
+
+    if is_pause then
+        love.keyboard.keysPressed = {}
+        love.mouse.buttonsPressed = {}
+        return
+    end
+    sounds['music']:play()
     -- scroll our background and ground, looping back to 0 after a certain amount
     backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
@@ -166,10 +192,15 @@ end
 
 function love.draw()
     push:start()
-    
+
     love.graphics.draw(background, -backgroundScroll, 0)
     gStateMachine:render()
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
-    
+    if is_pause then
+        --前三个数是RGB 但是只能改变中间的颜色, 不能改变边框的颜色, 奇怪
+        love.graphics.setColor(255, 255, 255, 190)
+        love.graphics.draw(Icon_img, pause_sprite, VIRTUAL_WIDTH / 2 - 24, VIRTUAL_HEIGHT / 2 - 24, 0, 3, 3)
+    end
+
     push:finish()
 end
